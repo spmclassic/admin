@@ -1,0 +1,136 @@
+.content_ch,
+.nav_first_ch,
+.nav_second_ch {
+    height: calc(100% - 51px);
+    float: left;
+    width: 120px;
+}
+
+.nav_first_ch,
+.nav_second_ch {
+    overflow: hidden;
+}
+
+.nav_first_ch {
+    background-color: #333;
+    text-align: center;
+    color: #c2c2c2;
+    font-size: 14px;
+    width: 91px;
+    margin-top: 50px;
+}
+
+.nav_second_ch {
+    background-color: #ececec;
+    margin-top: 50px;
+}
+
+.nav_first_ch a {
+    color: #eee;
+    font-family: '微软雅黑'
+}
+
+.avatar {
+    margin: 15px auto 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: url(../images/logo.png);
+    background-size: 32px
+}
+
+.nav_first_ch li {
+    padding: 0 18px;
+    margin-top: 14px;
+    line-height: 36px;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+}
+
+.nav_first_ch .on {
+    background-color: #189aca;
+}
+
+.hidden {
+    display: none;
+}
+
+.nav_first_ch .on a {
+    color: #fff
+}
+
+.second_list {
+    display: none
+}
+
+.on_second {
+    display: block
+}
+
+.nav_second_ch div {
+    line-height: 50px;
+    text-align: center
+}
+
+.second_list ul {
+    padding: 13px 10px;
+    border-right: 1px solid #ccc;
+    height: 1000px
+}
+
+.second_list li {
+    line-height: 36px;
+    padding: 0 10px;
+    margin-bottom: 14px
+}
+
+.on_gray {
+    background-color: #eee;
+    border-radius: 5px
+}
+
+.content_ch {
+    width: calc(100% - 232px);
+    background-color: #f2f2f2;
+    margin: 50px 0 0 210px;
+}
+
+.content_text {
+    padding-left: 26px;
+    line-height: 50px;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    border-left: 1px solid #ebebeb
+}
+
+.children-td-sj td:first-child {
+    text-indent: 30px;
+}
+
+.sidenav li .nav_children a {
+    font-size: 12px;
+}
+
+.nav_second_ch .sidenav li .nav_tit {
+    font-weight: bold;
+}
+
+.sidenav li {
+    height: 37px;
+    overflow: hidden;
+}
+
+.sidenav li.on {
+    height: auto;
+}
+
+.sidenav li.on .nav_tit i {
+    transform: rotate(180deg);
+}
+
+.sidenav li .nav_tit i {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    font-size: 13px;
+}
