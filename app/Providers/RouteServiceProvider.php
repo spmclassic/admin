@@ -37,7 +37,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
 
-        $this->mapWebRoutes('admin');
+        $this->mapWebRoutes('admin','manage');
 
         //
     }
@@ -49,9 +49,9 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapWebRoutes($prefix)
+    protected function mapWebRoutes($prefix,$domain = null)
     {
-        Route::domain(get_domain($prefix))
+        Route::domain(get_domain($domain ?? $prefix))
             ->middleware('web')
             ->namespace($this->namespace. '\\' . ucfirst($prefix))
             ->group(base_path('routes/' . $prefix . '.php'));
