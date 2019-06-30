@@ -11,12 +11,13 @@
             <!--right bengin-->
             <ul class="nav_pills mb10 clearfix">
                 <a href="{{ url('order/manage/index') }}"><li class="selected">订单列表</li></a>
+                <a class="btn btn_r" href="{{ url('order/manage/index') }}?excel=1">+ 导出</a>
             </ul>
             <div class="mainbox">
                 <div class="form-horizontal goods_nav_search clearfix">
                     <form method="get" name="search">
                         <div class="fl ml10 mr20 pos_rel">
-                            <input type="text" name="name" placeholder="订单号/手机号/商品名称" class="form-control w260" value="{{request('name')}}">
+                            <input type="text" name="name" placeholder="订单号/商品名称" class="form-control w260" value="{{request('name')}}">
                         </div>
                         <input type="submit" value="搜索" class="fl btn ml10 js_submit">
                     </form>
@@ -34,7 +35,6 @@
                                 <th  style="width: 10%">订单状态</th>
                                 <th  style="width: 15%">支付方式</th>
                                 <th  style="width: 15%">支付金额</th>
-                                <th  style="width: 10%">手机号</th>
                                 <th  style="width: 10%">姓名</th>
                             </tr>
                             </thead>
@@ -47,7 +47,6 @@
                                     <td>{{$lv['status'] == 5?'付款成功':($lv['status'] == 1 ? '待付款': '已取消')}}</td>
                                     <td>{{$lv['pay_type'] == 1?'微信支付':'积分支付'}}</td>
                                     <td>{{$lv['price'] ?? ' -- '}}</td>
-                                    <td>{{$lv['mobile'] ?? ' -- '}}</td>
                                     <td>{{$lv['name'] ?? ' -- '}}</td>
                                 </tr>
                             @empty
@@ -58,6 +57,9 @@
                     </div>
                 </div>
                 <!--tab 切换1 end-->
+                @if(!$lists->isEmpty())
+                    {!! $lists->appends(request()->all())->render() !!}
+                @endif
             </div>
             <!--right end-->
         </div>

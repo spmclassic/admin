@@ -11,6 +11,7 @@
             <!--right bengin-->
             <ul class="nav_pills mb10 clearfix">
                 <a href="{{ url('member/manage/user') }}"><li class="selected">用户列表</li></a>
+                <a class="btn btn_r" href="{{ url('member/manage/user') }}?excel=1">+ 导出</a>
             </ul>
             <div class="mainbox">
                 <div class="form-horizontal goods_nav_search clearfix">
@@ -31,7 +32,7 @@
                                 <th  style="width: 8%">ID</th>
                                 <th  style="width: 12%">状态</th>
                                 <th  style="width: 15%">昵称</th>
-                                <th  style="width: 15%">所在地</th>
+                                <th  style="width: 15%">头像</th>
                                 <th  style="width: 5%">性别</th>
                                 <th  style="width: 15%">注册时间</th>
                                 <th  style="width: 10%">积分</th>
@@ -44,7 +45,7 @@
                                     <td>{{$lv['id'] ?? ' -- '}}</td>
                                     <td>{{$lv['status'] == 1 ? '正常' : '禁用'}}</td>
                                     <td>{{$lv['nickname'] ?? ' -- '}}</td>
-                                    <td>{{$lv['mobile'] ?? ' -- '}}</td>
+                                    <td>@if($lv['avatar'])<img src="{{$lv['avatar'] ?? ' -- '}}" style="width: 50px; height: 50px;" />@endif</td>
                                     <td>{{$lv['gender'] == 1?'男':'女'}}</td>
                                     <td>{{$lv['created_at'] ?? ' -- '}}</td>
                                     <td>{{$lv['integral'] ?? ' -- '}}</td>
@@ -65,6 +66,9 @@
                     </div>
                 </div>
                 <!--tab 切换1 end-->
+                @if(!$lists->isEmpty())
+                    {!! $lists->appends(request()->all())->render() !!}
+                @endif
             </div>
             <!--right end-->
         </div>

@@ -17,14 +17,11 @@ use Illuminate\Http\Request;
 //https://learnku.com/articles/9842/user-role-permission-control-package-laravel-permission-usage-description
 
 
-
 Route::post('login', 'LoginController@login');
 Route::post('refresh', 'LoginController@refresh');
 Route::post('index', 'IndexController@index');
-Route::post('callback', 'IndexController@callback');
 
 Route::group(['middleware' => ['jwt.auth']], function ($api) {
-    Route::post('category', 'IndexController@category');
     Route::post('logout', 'LoginController@logout');
     Route::post('userinfo', 'LoginController@userinfo');
     Route::post('sign', 'LoginController@sign');
@@ -41,14 +38,12 @@ Route::group(['middleware' => ['jwt.auth']], function ($api) {
     Route::post('message/lists', 'IndexController@mlists');
     Route::post('message/detail/{model}', 'IndexController@dmessage');
     Route::post('goods', 'IndexController@goods');
-    Route::post('detail/{model}', 'IndexController@detail');
+    Route::post('goods/{model}', 'IndexController@detail');
     Route::post('sku/detail/{model}', 'IndexController@detailsku');
     Route::post('goods/buyed/{model}', 'IndexController@isbuyed');
     Route::post('share/{model}', 'IndexController@share');
-    Route::post('pay/{model}', 'IndexController@pay');
+    Route::post('savedata', 'IndexController@savedata');
     Route::post('saveuserinfo', 'IndexController@saveuserinfo');
-});
-
-Route::any('conf/video', function (){
-    return request()->all();
+    Route::post('comment', 'IndexController@comment');
+    Route::post('basket', 'IndexController@basket');
 });

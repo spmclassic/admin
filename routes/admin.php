@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth:admin']], function () {
                 Route::get('user/{operate}/{model}', ['as' => 'user.operate', 'uses' => 'UserController@operate']);
                 Route::get('callback', ['as' => 'callback', 'uses' => 'CallbackController@index']);
                 Route::get('callback/{model}', ['as' => 'callback.info', 'uses' => 'CallbackController@info']);
+                Route::get('message', ['as' => 'message', 'uses' => 'MessageController@index']);
+                Route::post('message/create', ['as' => 'message.create', 'uses' => 'MessageController@create']);
             });
         });
 
@@ -49,7 +51,10 @@ Route::group(['middleware' => ['auth:admin']], function () {
                 Route::get('category', ['as' => 'category', 'uses' => 'CategoryController@index']);
                 Route::any('category/create/{category?}', ['as' => 'category.create', 'uses' => 'CategoryController@create']);
                 Route::get('comment', ['as' => 'comment', 'uses' => 'CommentController@index']);
+                Route::any('comment/create/{model?}', ['as' => 'comment.create', 'uses' => 'CommentController@create']);
                 Route::get('comment/delete/{model}', ['as' => 'comment.delete', 'uses' => 'CommentController@delete']);
+                Route::get('class', ['as' => 'class', 'uses' => 'ClassController@index']);
+                Route::any('class/create/{category?}', ['as' => 'class.create', 'uses' => 'ClassController@create']);
             });
         });
 

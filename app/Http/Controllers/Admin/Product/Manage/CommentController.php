@@ -28,4 +28,32 @@ class CommentController extends InitController
         $model->delete();
         return $this->success('操作成功');
     }
+
+    public function create(Request $request,GdsComment $model = null){
+
+        if($request->isMethod('get')) {
+            return view($this->template . __FUNCTION__, compact('model'));
+        }
+
+        $data = $request->data;
+
+        $rules = [
+            'name' => 'required',
+        ];
+        $messages = [
+            'name.required' => '请输入属性名称',
+        ];
+
+        $validator = Validator::make($data, $rules, $messages);
+        if ($validator->fails()) {
+            return $this->error($validator->errors()->first(), null, true);
+        }
+
+        try {
+            GdsComment::saveBy($data);
+            return $this->success('操作成功',url('product/manage/comment'));
+        }catch (\Exception $e) {
+            return $this->error('操作异常，请联系开发人员'.$e->getMessage());
+        }
+    }
 }

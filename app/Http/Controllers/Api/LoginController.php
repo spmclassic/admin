@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\DB;
 
 class LoginController extends InitController{
 
-    public function __construct(IntegralService $integralService = null)
+    public function __construct()
     {
-        $this->integralService = $integralService;
+
     }
 
     /**
@@ -23,13 +23,8 @@ class LoginController extends InitController{
      */
     public function login(Request $request)
     {
-
-//        $appid = 'wxf8d08695c2d862f4'; //填写微信小程序appid
-//        $secret = 'ea09ddae2a1b1bf743766455181f89ae'; //填写微信小程序secret
-
-
-        $appid = 'wx1c7c48b523714138'; //填写微信小程序appid  正式服
-        $secret = '3ae529b648adbe027bda06cec84d061a'; //填写微信小程序secret
+        $appid = 'wx10596293afd7edc1'; //填写微信小程序appid  正式服
+        $secret = '42e20fbe88caa1a1a15fe0a09e287f28'; //填写微信小程序secret
 
         $code = $request->code ?? '';
 
@@ -56,24 +51,6 @@ class LoginController extends InitController{
     public function refresh()
     {
         return $this->respondWithToken($this->guard()->refresh());
-    }
-
-    public function sign(){
-        $user = $this->guard()->user();
-        try{
-            DB::beginTransaction();
-
-            $this->integralService->sign($user);
-
-            DB::commit();
-            return $this->success('success',null,[
-                'issign' => 1
-            ]);
-        }catch (\Exception $e) {
-            DB::rollback();
-            return $this->error($e->getMessage());
-        }
-
     }
 
     /**

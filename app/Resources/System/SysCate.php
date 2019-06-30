@@ -2,17 +2,16 @@
 /**
  * Created by PhpStorm.
  * User: 89340
- * Date: 2019/4/18
- * Time: 10:54
+ * Date: 2019/4/20
+ * Time: 15:15
  */
 
-namespace App\Resources\Gds;
+namespace App\Resources\System;
 
 use App\Resources\Base;
 
-class GdsGood extends Base
+class SysCate extends Base
 {
-
     /**
      * Transform the resource into an array.
      *
@@ -24,11 +23,7 @@ class GdsGood extends Base
         return [
             'id' => $this->id ?? 0,
             'name' => $this->name ?? '',
-            'image' => $this->image ?? '',
-            'intro' => $this->intro ?? '',
-            'attr' => \App\Models\Gds\GdsComment::all()
-
+            'image' => $this->image ?? ''
         ];
     }
-
 }

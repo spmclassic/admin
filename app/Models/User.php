@@ -37,7 +37,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     public function getGuardNameAttribute(){
-        return[
+
+        return [
             User::USER_TYPE_ADMIN => config('app.guard.admin'),
             User::USER_TYPE_TENANT => config('app.guard.tenant'),
             User::USER_TYPE_STAFF => config('app.guard.tenant'),

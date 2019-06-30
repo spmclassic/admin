@@ -15,6 +15,7 @@ use App\Models\System\SysCategory;
 class GdsGood extends Model
 {
     protected $appends = ['pay_name','timer_long','timer_longs','pay_view'];
+    protected $casts = ['intro' => 'json'];
     public function setPriceAttribute($value)
     {
         $this->attributes['price'] = $value*100;
@@ -35,10 +36,10 @@ class GdsGood extends Model
     }
 
     public function getTimerLongAttribute(){
-        return (floor($this->timer/60)).'分'.($this->timer%60)."秒";
+        return $this->timer;
     }
     public function getTimerLongsAttribute(){
-        return (floor($this->timer/60)).':'.($this->timer%60);
+        return $this->timer;
     }
 
     public function category(){
@@ -51,5 +52,13 @@ class GdsGood extends Model
 
     public function order(){
         return $this->belongsToMany(OrdOrder::class,'ord_order_items','spu_id','order_id');
+    }
+
+    public function comment(){
+        return $this->hasMany(GdsComment::class,'spu_id');
+    }
+
+    public function zan(){
+        return $this->hasMany(GdsZan::class,'spu_id');
     }
 }

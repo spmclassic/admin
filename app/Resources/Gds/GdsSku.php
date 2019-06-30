@@ -31,7 +31,7 @@ class GdsSku extends Base
             'number' => $this->number ?? 0,
             'intro' => $this->intro ?? '暂无简介',
             'type_name' => $this->type == 1 ? '单课' :'系列课',
-            'cover' => $this->url ?? '',
+            'cover' => $this->image ?? '',
             'date' => date('m-d',strtotime($this->created_at)),
             'timer' => $this->timer_longs,
             'pay' => $this->pay,
