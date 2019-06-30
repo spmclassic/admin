@@ -11,7 +11,6 @@
             <!--right bengin-->
             <ul class="nav_pills mb10 clearfix">
                 <a href="{{ url('order/manage/index') }}"><li class="selected">订单列表</li></a>
-                <a class="btn btn_r" href="{{ url('order/manage/index') }}?excel=1">+ 导出</a>
             </ul>
             <div class="mainbox">
                 <div class="form-horizontal goods_nav_search clearfix">

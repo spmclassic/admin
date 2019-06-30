@@ -21,10 +21,9 @@
                             <thead>
                             <tr>
                                 <th  style="width: 8%">ID</th>
-                                <th  style="width: 15%">姓名</th>
-                                <th  style="width: 12%">手机号</th>
-                                <th  style="width: 15%">反馈时间</th>
-                                <th  style="width: 20%">操作</th>
+                                <th  style="width: 15%">邮箱</th>
+                                <th  style="width: 12%">备注历史</th>
+                                <th  style="width: 15%">最近下单时间</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -34,9 +33,6 @@
                                     <td>{{$lv['name'] ?? ' -- '}}</td>
                                     <td>{{$lv['mobile'] ?? ' -- '}}</td>
                                     <td>{{$lv['created_at']}}</td>
-                                    <td>
-                                        <a href="{!! url('member/manage/callback',['id'=>$lv['id']]) !!}">详情</a>
-                                    </td>
                                 </tr>
                             @empty
                                 <tr><td colspan="6">暂时没有任何数据</td> </tr>

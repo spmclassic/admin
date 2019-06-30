@@ -4,7 +4,7 @@
     <div class="content_ch">
         <div class="admin_info clearfix">
             <ul class="nav_pills clearfix">
-                <a href="{{ url('product/manage/category') }}"><li>属性管理</li></a>
+                <a href="{{ url('product/manage/comment') }}"><li>属性列表</li></a>
                 <li class="selected">
                     创建/编辑属性目
                 </li>

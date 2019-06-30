@@ -1,12 +1,12 @@
 @extends('admin.layout.main')
-@section('title')-创建/编辑类目@stop
+@section('title')-创建/编辑@stop
 @section('content')
     <div class="content_ch">
         <div class="admin_info clearfix">
             <ul class="nav_pills clearfix">
-                <a href="{{ url('product/manage/goods') }}"><li>课程管理</li></a>
+                <a href="{{ url('product/manage/goods') }}"><li>商品管理</li></a>
                 <li class="selected">
-                    创建/编辑课程
+                    创建/编辑商品
                 </li>
             </ul>
             <div class="mainbox">
