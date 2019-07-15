@@ -26,11 +26,11 @@ class GdsSku extends Model
     }
 
     public function getTimerLongAttribute(){
-        return (floor($this->timer/60)).'分'.($this->timer%60)."秒";
+        return $this->timer;
     }
 
     public function getTimerLongsAttribute(){
-        return (floor($this->timer/60)).':'.($this->timer%60);
+        return $this->timer;
     }
 
     public function getPriceAttribute($value)

@@ -10,14 +10,14 @@
         <div class="admin_info clearfix">
             <!--right bengin-->
             <ul class="nav_pills mb10 clearfix">
-                <a href="{{ url('product/manage/goods') }}"><li class="selected">课程管理</li></a>
-                <a class="btn btn_r" href="{{ url('product/manage/goods/create') }}">+ 创建课程</a>
+                <a href="{{ url('product/manage/goods') }}"><li class="selected">商品管理</li></a>
+                <a class="btn btn_r" href="{{ url('product/manage/goods/create') }}">+ 创建商品</a>
             </ul>
             <div class="mainbox">
                 <div class="form-horizontal goods_nav_search clearfix">
                     <form method="get" name="search">
                         <div class="fl ml10 mr20 pos_rel">
-                            <input type="text" name="name" placeholder="名称/主讲人" class="form-control w260" value="{{request('name')}}">
+                            <input type="text" name="name" placeholder="名称" class="form-control w260" value="{{request('name')}}">
                         </div>
                         <input type="submit" value="搜索" class="fl btn ml10 js_submit">
                     </form>
@@ -29,12 +29,9 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th  style="width: 8%">ID</th>
+                                <th  style="width: 8%">二维码</th>
+                                <th  style="width: 22%">图片</th>
                                 <th  style="width: 22%">名称</th>
-                                <th  style="width: 10%">主讲人</th>
-                                <th  style="width: 10%">时长</th>
-                                <th  style="width: 10%">价格</th>
-                                <th  style="width: 10%">支付方式</th>
                                 <th  style="width: 15%">所属分类</th>
                                 <th  style="width: 15%">操作</th>
                             </tr>
@@ -42,15 +39,11 @@
                             <tbody>
                             @forelse($lists as $lv)
                                 <tr>
-                                    <td>{{$lv['id'] ?? ''}}</td>
+                                    <td><div><a class="dddddd">查看</a><div hidden class="qrcodeeee" href="/pages/goods/main?id={{$lv['id']}}"></div></div></td>
+                                    <td><img style="width:100px;" src="{{$lv['image'] ?? ''}}" /></td>
                                     <td>{{$lv['name'] ?? ''}}</td>
-                                    <td>{{$lv['teacher'] ?? ''}}</td>
-                                    <td>{{$lv['timer_long'] ?? ''}}</td>
-                                    <td>{{$lv['price'] ?? ''}}</td>
-                                    <td>{{$lv['pay_name'] ?? ''}}</td>
                                     <td>{{$lv['category']['name'] ?? ''}}</td>
                                     <td>
-                                        <a class="red" href="{!! url('product/manage/goods/skus',['id'=>$lv['id']]) !!}">视频管理</a>
                                         <a href="{!! url('product/manage/goods/create',['id'=>$lv['id']]) !!}">编辑</a>
                                         <a class="do_action" data-confirm="确定要删除吗？" data-url="{!! url('product/manage/goods/delete',['id'=>$lv['id']]) !!}">删除</a>
                                     </td>

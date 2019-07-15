@@ -15,9 +15,9 @@
             <div class="mainbox">
                 <form name="profile-form" class="base_form layui-form" method="post" class="mtb20" >
                     <div class="form-group">
-                        <label class="col-xs-2 t_r"><span class="red">*</span>转发获取积分：</label>
+                        <label class="col-xs-2 t_r"><span class="red">*</span>签到获取积分：</label>
                         <div class="col-xs-3">
-                            <input autocomplete="off" type="number" class="form-control" name="data[zhuanfa]"  value="{!! $model['zhuanfa'] ?? 0 !!}">
+                            <input autocomplete="off" type="number" class="form-control" name="data[qiandao]"  value="{!! $model['qiandao'] ?? 0 !!}">
                         </div>
                         <label class="col-xs-2 t_r"><span class="red">*</span>分享获取积分：</label>
                         <div class="col-xs-3">
@@ -33,17 +33,6 @@
                         <label class="col-xs-2 t_r"><span class="red">*</span>支付获取积分：</label>
                         <div class="col-xs-3">
                             <input autocomplete="off" type="number" class="form-control" name="data[zhifu]"  value="{!! $model['zhifu'] ?? 0 !!}">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-xs-2 t_r"><span class="red">*</span>签到获取积分：</label>
-                        <div class="col-xs-3">
-                            <input autocomplete="off" type="number" class="form-control" name="data[qiandao]"  value="{!! $model['qiandao'] ?? 0 !!}">
-                        </div>
-                        <label class="col-xs-2 t_r"><span class="red">*</span>关注公众号获取积分：</label>
-                        <div class="col-xs-3">
-                            <input autocomplete="off" type="number" class="form-control" name="data[guanzhu]"  value="{!! $model['guanzhu'] ?? 0 !!}">
                         </div>
                     </div>
 

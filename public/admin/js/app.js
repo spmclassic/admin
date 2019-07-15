@@ -3,6 +3,7 @@ seajs.config({
         $: "jq/jquery/2.1.1/jquery",
         "jquery": "jq/jquery/2.1.1/jquery",
         "jquery.form": "jq/jquery.form/3.23/jquery.form",
+        "jquery.qrcode": "jq/jquery.qrcode/jquery.qrcode.min",
         "jquery.masonry": "jq/jquery.masonry/4.1.1/jquery.masonry.min",
         "jquery.raty": "jq/jquery.raty/2.4.5/jquery.raty",
         "jquery.laydate": "jq/jquery.laydate/1.1/jquery.laydate",

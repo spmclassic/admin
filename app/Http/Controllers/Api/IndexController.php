@@ -9,8 +9,10 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\Gds\GdsComment;
 use App\Models\Gds\GdsGood;
 use App\Models\Gds\GdsSku;
+use App\Models\Gds\GdsZan;
 use App\Models\Ord\OrdOrder;
 use App\Models\Ord\OrdOrderItem;
 use App\Models\User\UserCallback;
@@ -19,10 +21,12 @@ use App\Models\User\UserShare;
 use App\Services\PayService;
 use Illuminate\Http\Request;
 use App\Models\System\SysCategory;
+use App\Models\System\SysCate;
 use App\Models\User\UserIntegralLog;
 use App\Resources\Gds\GdsGood as GdsGoodRescource;
 use App\Resources\Gds\GdsSku as GdsSkuRescource;
 use App\Resources\System\SysCategory as SysCategoryRescource;
+use App\Resources\System\SysCate as SysCateRescource;
 use App\Resources\User as UserResource;
 use Illuminate\Support\Facades\Validator;
 use App\Resources\User\UserMessage as UserMessageRescource;
@@ -30,9 +34,57 @@ use Illuminate\Support\Facades\DB;
 
 class IndexController extends InitController
 {
-    public function __construct(PayService $payService)
+    public function __construct(
+        PayService $payService
+    )
     {
         $this->payService = $payService;
+    }
+
+    public function basket(Request $request){
+        $data = $request->all();
+        $goods = [];
+        foreach ($data as $key => $val){
+            if($val > 0 && $good = GdsGood::find($key)){
+                $good->number = $val;
+                $goods[] = $good;
+            }
+        }
+        return $this->success('提交成功','null',$goods);
+
+    }
+
+    public function comment(Request $request){
+        $data = [
+            'content' => $request->content,
+            'goodsid' => $request->goodsid,
+            'backid' => $request->backid,
+        ];
+
+        $rules = [
+            'content' => 'required',
+            'goodsid' => 'required',
+        ];
+        $messages = [
+            'content.required' => '请输入评论',
+            'goodsid.required' => '缺少ID',
+        ];
+        $validator = Validator::make($data, $rules, $messages);
+
+        if ($validator->fails()) {
+            return $this->error($validator->errors()->first(), null, true);
+        }
+        $user = \Auth::user();
+
+        GdsComment::saveBy([
+            'user_id' => $user->id ?? 0,
+            'order_id' => $data['backid'] ?? 0,
+            'spu_id' => $data['goodsid'],
+            'content' => $data['content'],
+        ]);
+
+
+        return $this->success('提交成功');
     }
 
     public function index(){
@@ -41,7 +93,7 @@ class IndexController extends InitController
 
         return $this->success('success',null,[
             'banner' => $banner,
-            'hot' => GdsGoodRescource::collection(GdsGood::whereHas('skus')->orderBy('sorts','DESC')->take(2)->get()),
+            'hot' => GdsGoodRescource::collection(GdsGood::whereHas('skus')->orderBy('is_hot','DESC')->take(2)->get()),
             'new' => GdsGoodRescource::collection(GdsGood::whereHas('skus')->orderBy('id','DESC')->take(4)->get()),
             'version' => 1,
             'join' => [
@@ -77,114 +129,24 @@ class IndexController extends InitController
     }
 
     public function category(){
-        $category = SysCategory::where('status',1)->where('parent_id',0)->get();
+        $category = SysCategory::where('status',1)->where('parent_id',0)->orderBy('sorts','DESC')->get();
 
         return SysCategoryRescource::collection($category);
     }
 
-    /**
-     * 我的积分
-     */
-    public function integral(){
-        $user = \Auth::user();
-
-        $logs = UserIntegralLog::where('user_id',$user->id)->where('status',1)->orderBy('id','DESC')->get();
-        return $this->success('success',null,[
-            'user' => new UserResource($user),
-            'lists' => UserResource\UserIntegralLog::collection($logs),
-        ]);
-    }
-
-    /**
-     * 删除积分记录
-     */
-    public function integralDelete(UserIntegralLog $model = null){
-        if(!$model){
-            return $this->error('no exist');
-        }
-        $model->status = 0;
-        $model->save();
-        return $this->success('success');
-    }
-
-    /**
-     * tel
-     */
-    public function tel(){
-        $conf = @file_get_contents('tel.txt');
-        $model = $conf ? json_decode($conf,true):[];
-        return $this->success('success',null,$model);
-    }
-
-    /**
-     * buy 购买详情
-     */
-    public function buy(Request $request){
-        $user = \Auth::user();
-        $cid = $request->cid ?? 0;
-        $data = GdsGood::whereHas('order',function ($query) use ($user){
-            $query->where('user_id',$user->id);
-            $query->where('status','>',1);
-        });
-        $cid && $data = $data->where('category_id',$cid);
-        return $this->success('success',null,GdsGoodRescource::collection($data->get()));
-    }
-
-    /**
-     * 积分规则
-     */
-    public function rule(){
-        $conf = @file_get_contents('score.txt');
-        $model = $conf ? json_decode($conf,true):[];
-        return $this->success('success',null,$model);
-    }
-
-    /**
-     * 清除缓存
-     */
-    public function clearcatch(){
-        sleep(2);
-        return $this->success('清除成功');
-    }
-
-    /**
-     * 消息通知
-     */
-    public function message(){
-        $user = \Auth::user();
-        return $this->success('success',null,[
-            'type' => $user->job_number == 1 ? 1:0
-        ]);
-    }
-
-    public function changemessage(Request $request){
-        $user = \Auth::user();
-
-        if(!isset($request->type)){
-            return $this->error('缺少状态参数');
-        }
-        $user->job_number = $request->type ?? 0;
-        $user->save();
-        return $this->success('success');
-    }
-
-    public function question(Request $request){
-
+    public function savedata(Request $request){
         $data = [
-            'content' => $request->content,
-            'mobile' => $request->mobile,
-            'name' => $request->name,
+            'data' => $request->data,
+            'mail' => $request->mail,
         ];
 
         $rules = [
-            'content' => 'required',
-            'mobile' => 'required',
-            'name' => 'required',
+            'data' => 'required',
+            'mail' => 'required',
         ];
         $messages = [
-            'name.required' => '请输入姓名',
-            'content.required' => '请输入问题',
-            'mobile.required' => '请输入联系方式',
+            'data.required' => '无商品',
+            'mail.required' => '请输入邮箱',
         ];
         $validator = Validator::make($data, $rules, $messages);
 
@@ -193,12 +155,7 @@ class IndexController extends InitController
         }
         $user = \Auth::user();
 
-        UserCallback::saveBy([
-            'user_id' => $user->id ?? 0,
-            'name' => $data['name'],
-            'mobile' => $data['mobile'],
-            'content' => $data['content'],
-        ]);
+
 
         return $this->success('提交成功');
     }
@@ -232,7 +189,7 @@ class IndexController extends InitController
 
     public function mlists(){
         $user = \Auth::user();
-        return UserMessageRescource::collection($user->message);
+        return UserMessageRescource::collection(UserMessage::where('created_at','>',$user->created_at)->get());
     }
 
     public function dmessage(Request $request,UserMessage $model = null){
@@ -244,21 +201,20 @@ class IndexController extends InitController
      */
     public function goods(Request $request){
         $cid = $request->cid ?? 0;
+        $tid = $request->tid ?? 0;
         $key = $request->key ?? 0;
         $data = GdsGood::where('id','>',0);
         $cid && $data = $data->where('category_id',$cid);
-        $key && $data = $data->where('name','like',"%{$key}%");
+        $tid && $data = $data->where('teacher_id',$tid);
+        $key && $data = $data->where(function ($query)use($key){
+            $query->where('name','like',"%{$key}%")->orWhere('teacher','like',"%{$key}%");
+        });
         return $this->success('success',null,GdsGoodRescource::collection($data->get()));
     }
 
     public function detail(GdsGood $model = null){
-        $model->number++;
-        $model->save();
 
-        $conf = @file_get_contents('tel.txt');
-        $need = $conf ? json_decode($conf,true):[];
-
-        return $this->success('success',$need,new GdsGoodRescource($model));
+        return $this->success('success',null,new GdsGoodRescource($model));
 
     }
 
@@ -303,6 +259,7 @@ class IndexController extends InitController
             'user_id' => $user->id ?? 0,
             'spu_id' => $model->id ?? 0,
         ]);
+
         return $this->success('success',null,$user);
     }
 
