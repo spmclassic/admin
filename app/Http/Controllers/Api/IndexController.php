@@ -155,9 +155,44 @@ class IndexController extends InitController
         }
         $user = \Auth::user();
 
+        //写入用户
+        UserCallback::saveBy([
+            'name' => $request->mail,
+            'content' => $request->mark,
+        ]);
 
+        //写入订单
+        $this->mkOrder($user,$request->data,$request->mail);
 
         return $this->success('提交成功');
+    }
+
+    protected function mkOrder($user,$goods,$mail = null){
+        $serial = time().$user['id'];
+        $order = OrdOrder::saveBy([
+            'serial' => $serial,
+            'user_id' => $user['id'],
+            'mobile' => $mail,
+            'status' => 1,
+            'name' => $user['nickname'],
+        ]);
+        $goods_name = '';
+        foreach ($goods as $ksy=>$val){
+            if($val > 0){
+                OrdOrderItem::saveBy([
+                    'order_id' => $order->id,
+                    'spu_id' => $ksy,
+                    'sku_id' => $val,
+                ]);
+                $good = GdsGood::find($ksy)->name . " * ".$val .' | ';
+                $goods_name .= $good;
+            }
+        }
+
+        $order->goods_name = $goods_name;
+        $order->save();
+
+        return $order;
     }
 
     public function question2(Request $request){
@@ -318,26 +353,6 @@ class IndexController extends InitController
             DB::rollback();
             return $this->error($e->getMessage());
         }
-    }
-
-    protected function mkOrder($user,GdsGood $model,$paytype=1){
-        $serial = time().$user['id'];
-        $order = OrdOrder::saveBy([
-            'serial' => $serial,
-            'user_id' => $user['id'],
-            'mobile' => '',
-            'goods_name' => $model->name,
-            'pay_type' => $paytype,
-            'status' => 1,
-            'price' => $model->price,
-            'name' => $user['nickname'],
-        ]);
-        OrdOrderItem::saveBy([
-            'order_id' => $order['id'],
-            'spu_id' => $model['id'],
-        ]);
-
-        return $order;
     }
 
     protected function orderOk(OrdOrder $order = null){

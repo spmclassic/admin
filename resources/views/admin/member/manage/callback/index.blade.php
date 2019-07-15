@@ -31,7 +31,7 @@
                                 <tr>
                                     <td>{{$lv['id'] ?? ' -- '}}</td>
                                     <td>{{$lv['name'] ?? ' -- '}}</td>
-                                    <td>{{$lv['mobile'] ?? ' -- '}}</td>
+                                    <td>{{$lv['content'] ?? ' -- '}}</td>
                                     <td>{{$lv['created_at']}}</td>
                                 </tr>
                             @empty

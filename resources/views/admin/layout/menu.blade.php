@@ -1,7 +1,7 @@
 <ul class="top-suspension">
     <li class="li-left top-picture">
         <a href="javascript:;">
-            <img src="/images/basicprofile" alt=""/>
+            <img src="http://static.spmclassic.com/images/m/logo.png" alt=""/>
         </a>
     </li>
     <li class="li-left sixty"><a href=""> <i class="iconfont">&#xe640;</i></a></li>

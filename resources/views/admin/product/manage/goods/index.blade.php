@@ -39,7 +39,7 @@
                             <tbody>
                             @forelse($lists as $lv)
                                 <tr>
-                                    <td><div><a class="dddddd">查看</a><div hidden class="qrcodeeee" href="/pages/goods/main?id={{$lv['id']}}"></div></div></td>
+                                    <td><div><a class="dddddd">查看</a><div class="qrcodeeee" href="/pages/goods/main?id={{$lv['id']}}"></div></div></td>
                                     <td><img style="width:100px;" src="{{$lv['image'] ?? ''}}" /></td>
                                     <td>{{$lv['name'] ?? ''}}</td>
                                     <td>{{$lv['category']['name'] ?? ''}}</td>

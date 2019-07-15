@@ -29,11 +29,9 @@
                             <thead>
                             <tr>
                                 <th  style="width: 13%">订单号</th>
-                                <th  style="width: 12%">视频名称</th>
+                                <th  style="width: 12%">邮箱</th>
+                                <th  style="width: 12%">商品名称</th>
                                 <th  style="width: 15%">下单时间</th>
-                                <th  style="width: 10%">订单状态</th>
-                                <th  style="width: 15%">支付方式</th>
-                                <th  style="width: 15%">支付金额</th>
                                 <th  style="width: 10%">姓名</th>
                             </tr>
                             </thead>
@@ -41,11 +39,9 @@
                             @forelse($lists as $lv)
                                 <tr>
                                     <td>{{$lv['serial'] ?? ' -- '}}</td>
+                                    <td>{{$lv['mobile'] ?? ' -- '}}</td>
                                     <td>{{$lv['goods_name'] ?? ' -- '}}</td>
                                     <td>{{$lv['created_at'] ?? ' -- '}}</td>
-                                    <td>{{$lv['status'] == 5?'付款成功':($lv['status'] == 1 ? '待付款': '已取消')}}</td>
-                                    <td>{{$lv['pay_type'] == 1?'微信支付':'积分支付'}}</td>
-                                    <td>{{$lv['price'] ?? ' -- '}}</td>
                                     <td>{{$lv['name'] ?? ' -- '}}</td>
                                 </tr>
                             @empty
