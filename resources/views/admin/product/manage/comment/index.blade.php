@@ -22,7 +22,8 @@
                         <table class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th  style="width: 80%">名称</th>
+                                <th  style="width: 60%">名称</th>
+                                <th  style="width: 20%">排序</th>
                                 <th  style="width: 20%">操作</th>
                             </tr>
                             </thead>
@@ -30,6 +31,7 @@
                             @forelse($lists as $lv)
                                 <tr>
                                     <td>{{$lv->name ?? ''}}</td>
+                                    <td>{{$lv->sorts ?? 0}}</td>
                                     <td>
                                         <a href="{!! url('product/manage/comment/create',['id'=>$lv['id']]) !!}">编辑</a>
                                         <a class="do_action" data-confirm="确定要删除吗？" data-url="{!! url('product/manage/comment/delete',['id'=>$lv['id']]) !!}">删除</a>

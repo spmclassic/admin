@@ -21,7 +21,7 @@ class CommentController extends InitController
     }
 
     public function index(Request $request){
-        $lists = GdsComment::paginate(self::PAGESIZE);
+        $lists = GdsComment::orderBy('sorts','DESC')->paginate(self::PAGESIZE);
         return view( $this->template. __FUNCTION__,compact('lists'));
     }
     public function delete(GdsComment $model = null){

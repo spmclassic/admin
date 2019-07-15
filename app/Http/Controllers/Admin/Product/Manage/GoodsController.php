@@ -31,13 +31,14 @@ class GoodsController extends InitController
         $lists = GdsGood::where(function ($query) use ($name){
             $name && $query->where('name','like',"%$name%")->orWhere('teacher',$name);
         })->orderBy('sorts','DESC')->paginate(self::PAGESIZE);
-        return view( $this->template. __FUNCTION__,compact('lists'));
+        $shuxing = GdsComment::orderBy('sorts','DESC')->get();
+        return view( $this->template. __FUNCTION__,compact('lists','shuxing'));
     }
 
     public function create(Request $request,GdsGood $model = null){
         if($request->isMethod('get')) {
             $categories = SysCategory::getCategorys(SysCategory::TYPE_PRODUCT,SysCategory::STATUS_OK)->mergeTree('node');
-            $shuxing = GdsComment::all();
+            $shuxing = GdsComment::orderBy('sorts','DESC')->get();
             return view($this->template . __FUNCTION__, compact('model','categories','shuxing'));
         }
 

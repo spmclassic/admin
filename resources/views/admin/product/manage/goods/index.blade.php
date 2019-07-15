@@ -39,7 +39,22 @@
                             <tbody>
                             @forelse($lists as $lv)
                                 <tr>
-                                    <td><div><a class="dddddd">查看</a><div class="qrcodeeee" href="/pages/goods/main?id={{$lv['id']}}"></div></div></td>
+                                    <td>
+                                        <div>
+                                            <a class="dddddd">查看</a>
+                                            <div hidden style="top:0; bottom: 0; left: 0; right: 0; position: absolute; overflow: hidden;">
+                                                <div style="margin: 20px;" class="qrcodeeee" href="/pages/goods/main?id={{$lv['id']}}"></div>
+                                                <div style="position: absolute; width: 300px; height: 300px; right: 10px; bottom: 50px; overflow: hidden;">
+                                                    <img style="height:100%;" src="{{$lv['image'] ?? ''}}" />
+                                                </div>
+                                                <ul style="width: 400px; position: absolute; bottom: 30px; left: 20px; font-size: 20px; line-height: 26px; font-weight: bold;">
+                                                    @foreach($shuxing as $val)
+                                                        <li>{{$val['name'] ?? ''}} : {{$lv->intro["'".$val['id']."'"] ?? ''}}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td><img style="width:100px;" src="{{$lv['image'] ?? ''}}" /></td>
                                     <td>{{$lv['name'] ?? ''}}</td>
                                     <td>{{$lv['category']['name'] ?? ''}}</td>

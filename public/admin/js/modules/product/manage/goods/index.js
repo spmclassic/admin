@@ -2,6 +2,7 @@ define(function(require, exports, module) {
     require('layui.css');
     require('layui');
     require('jquery.qrcode');
+    require('utf');
     layui.use(['form', 'layedit','layer'], function () {
         var form = layui.form;
         form.render();
@@ -9,9 +10,12 @@ define(function(require, exports, module) {
 
     $('.qrcodeeee').each(function(){
         $(this).qrcode({
-            width: 300, //宽度
-            height:300, //高度
-            text: $(this).attr('href')
+            width: 160, //宽度
+            height:160, //高度
+            text: $(this).attr('href'),
+            background : "#ffffff",
+            foreground : "#000000",
+            src:'http://manage.spmclassic.com/images/logo2.png'
         })
     })
 
@@ -19,7 +23,7 @@ define(function(require, exports, module) {
         layer.open({
             type: 1,
             closeBtn: 0, //不显示关闭按钮
-            anim: 2,
+            area:['800px','550px'],
             shadeClose: true, //开启遮罩关闭
             content: $(this).next()
         });
