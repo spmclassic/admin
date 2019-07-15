@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'LoginController@login');
 Route::post('refresh', 'LoginController@refresh');
-Route::post('index', 'IndexController@index');
+Route::any('index', 'IndexController@index');
 
 Route::group(['middleware' => ['jwt.auth']], function ($api) {
     Route::post('logout', 'LoginController@logout');

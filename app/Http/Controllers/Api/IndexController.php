@@ -88,6 +88,13 @@ class IndexController extends InitController
     }
 
     public function index(){
+
+        $data = ['email'=>'89340545@qq.com', 'name'=>'duanzhiwei', 'uid'=>1, 'activationcode'=>1234];
+        $res = \Mail::send('activemail', $data, function($message) use($data)
+        {
+            $message->to($data['email'], $data['name'])->subject('欢迎注册我们的网站，请激活您的账号！');
+        });
+dd($res);
         $conf = @file_get_contents('banner.txt');
         $banner = $conf ? json_decode($conf,true):[];
 
@@ -163,6 +170,7 @@ class IndexController extends InitController
 
         //写入订单
         $this->mkOrder($user,$request->data,$request->mail);
+        //写入邮件
 
         return $this->success('提交成功');
     }

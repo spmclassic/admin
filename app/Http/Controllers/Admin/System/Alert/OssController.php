@@ -46,7 +46,7 @@ class OssController extends InitController
 
     public function auth(Request $request){
         $id= 'LTAIxuQ5c0PjJfv7';
-        $key= 'OMGo8jURX98RhLayhv2BxkN2xPuY5b';
+        $key= 'VOiClrFEijfyxbr4nKvT16cKpH1pfT';
         $host = 'https://spmclassic.oss-cn-beijing.aliyuncs.com/';
         $callbackurl = 'http://manage.spmclassic.com/callback/oss/'.\Auth::user()->id ?? 0;
 
