@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="form-group category-msg-l1">
-                        <label class="col-xs-2 t_r"><span class="red">*</span>商品名称：</label>
+                        <label class="col-xs-2 t_r"><span class="red">*</span>Description：</label>
                         <div class="col-xs-4">
                             <input type="text" class="form-control" placeholder="1-32个字符" name="data[name]" maxlength="32" value="{{$model->name ?? ''}}">
                         </div>
