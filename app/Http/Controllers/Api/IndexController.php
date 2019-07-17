@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Models\Gds\GdsComment;
 use App\Models\Gds\GdsGood;
 use App\Models\Gds\GdsSku;
@@ -27,6 +26,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Resources\User\UserMessage as UserMessageRescource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Excel;
 
 class IndexController extends InitController
 {
@@ -85,19 +85,26 @@ class IndexController extends InitController
 
     public function index(){
 
-        $message = 'test';
-        $to = 'it@spmclassic.com';
-        $subject = '邮件名称xlsx';
-        $res = Mail::send(
-            'activemail',
-            ['content' => $message],
-            function ($message) use($to, $subject) {
-                $message->to($to)->subject($subject);
-                $attachment = storage_path('app/public/paymax-base-data.xlsx');
-                $message->attach($attachment,['as'=>'测试文档.xlsx']);
-            }
-        );
-dd($res);
+        $cellData = [];
+        Excel::create('测试详情',function($excel) use ($cellData){
+            $excel->sheet('detail', function($sheet) use ($cellData){
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
+
+//        $message = 'test';
+//        $to = 'it@spmclassic.com';
+//        $subject = '邮件名称xlsx';
+//        $res = Mail::send(
+//            'activemail',
+//            ['content' => $message],
+//            function ($message) use($to, $subject) {
+//                $message->to($to)->subject($subject);
+//                $attachment = storage_path('app/public/paymax-base-data.xlsx');
+//                $message->attach($attachment,['as'=>'测试文档.xlsx']);
+//            }
+//        );
+//dd($res);
         $conf = @file_get_contents('banner.txt');
         $banner = $conf ? json_decode($conf,true):[];
 
