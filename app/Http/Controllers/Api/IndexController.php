@@ -12,7 +12,6 @@ namespace App\Http\Controllers\Api;
 use App\Models\Gds\GdsComment;
 use App\Models\Gds\GdsGood;
 use App\Models\Gds\GdsSku;
-use App\Models\Gds\GdsZan;
 use App\Models\Ord\OrdOrder;
 use App\Models\Ord\OrdOrderItem;
 use App\Models\User\UserCallback;
@@ -21,16 +20,13 @@ use App\Models\User\UserShare;
 use App\Services\PayService;
 use Illuminate\Http\Request;
 use App\Models\System\SysCategory;
-use App\Models\System\SysCate;
-use App\Models\User\UserIntegralLog;
 use App\Resources\Gds\GdsGood as GdsGoodRescource;
 use App\Resources\Gds\GdsSku as GdsSkuRescource;
 use App\Resources\System\SysCategory as SysCategoryRescource;
-use App\Resources\System\SysCate as SysCateRescource;
-use App\Resources\User as UserResource;
 use Illuminate\Support\Facades\Validator;
 use App\Resources\User\UserMessage as UserMessageRescource;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class IndexController extends InitController
 {
@@ -89,11 +85,18 @@ class IndexController extends InitController
 
     public function index(){
 
-        $data = ['email'=>'89340545@qq.com', 'name'=>'duanzhiwei', 'uid'=>1, 'activationcode'=>1234];
-        $res = \Mail::send('activemail', $data, function($message) use($data)
-        {
-            $message->to($data['email'], $data['name'])->subject('欢迎注册我们的网站，请激活您的账号！');
-        });
+        $message = 'test';
+        $to = 'it@spmclassic.com';
+        $subject = '邮件名称xlsx';
+        $res = Mail::send(
+            'activemail',
+            ['content' => $message],
+            function ($message) use($to, $subject) {
+                $message->to($to)->subject($subject);
+                $attachment = storage_path('app/public/paymax-base-data.xlsx');
+                $message->attach($attachment,['as'=>'测试文档.xlsx']);
+            }
+        );
 dd($res);
         $conf = @file_get_contents('banner.txt');
         $banner = $conf ? json_decode($conf,true):[];
