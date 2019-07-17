@@ -83,66 +83,84 @@ class IndexController extends InitController
         return $this->success('提交成功');
     }
 
-    public function index(){
+    public function index(OrdOrder $order = null){
+        $ordernum = $order->serial;
+        $attr = GdsComment::orderBy('sorts','DESC')->get();
 
-        $cellData = [];
-        Excel::create('测试详情',function($excel) use ($cellData){
+        $cellData = [
+            [
+                '','','','','','','Official Quotation Template From SPM','',''
+            ],
+            [
+                'SPM Classic Furniture Co., Ltd'
+            ],
+            [
+                'Ad:H4, Beitang, Art Zoo, Songzhuang, Tongzhou Districrt, Beijing,CN 300451'
+            ],
+            [
+                'http://spmclassic.com'
+            ],
+            [
+                'Date: ','','','','','','Payment term:','T/T'
+            ],
+            [
+                'Contact: ','','Validation: ','','','','Packing: 180 pounds packing material'
+            ],
+        ];
+        //组合订单数据
+        $titles = ['No.','Photo','Description'];
+        foreach ($attr as $val){
+            $titles[] = $val['name'];
+        }
+        $titles[] = 'number';
+        $titles[] = 'Remark';
+        $cellData[] = $titles;
+
+        foreach ($order->items as $key => $item){
+            $need = [$key+1,$item->good->image ?? '',$item->good->name ?? ''];
+            foreach ($attr as $valll){
+                $need[] = $item->good->intro["'{$valll['id']}'"] ?? '';
+            }
+            $need[] = $item->sku_id;
+            $cellData[] = $need;
+        }
+
+        Excel::create($ordernum,function($excel) use ($cellData){
             $excel->sheet('detail', function($sheet) use ($cellData){
                 $sheet->rows($cellData);
+
+                $sheet->setWidth(['A' => 15, 'B' => 15, 'C' => 15, 'D' => 15, 'E' => 15, 'F' => 15, 'G' => 15, 'H' => 15, 'I' => 15, 'J' => 15]);
+                $sheet->getDefaultRowDimension()->setRowHeight(20);
+                $sheet->getDefaultStyle()->getFont()->setSize(10);
+                $sheet->getStyle( 'G1')->getFont()->setSize(22);
+                $sheet->getStyle( 'G1')->getFont()->setBold(true);
+                $sheet->getStyle( 'G1')->getAlignment()->setVertical(\PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $sheet->getStyle( 'G1')->getAlignment()->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+                //添加图片
+                $objDrawing = new \PHPExcel_Worksheet_Drawing();
+                $signature = './images/121.png';//路片路径
+                $objDrawing->setPath($signature);
+                $objDrawing->setCoordinates('J' . '1');//坐标
+                $objDrawing->setWidth(160);//图片宽
+                $objDrawing->setHeight(160);//图片高
+                $objDrawing->setWorksheet($sheet);
             });
-        })->export('xls');
+        })->store('xls');//文件默认保存到storage/exports目录下store|export
 
-//        $message = 'test';
-//        $to = 'it@spmclassic.com';
-//        $subject = '邮件名称xlsx';
-//        $res = Mail::send(
-//            'activemail',
-//            ['content' => $message],
-//            function ($message) use($to, $subject) {
-//                $message->to($to)->subject($subject);
-//                $attachment = storage_path('app/public/paymax-base-data.xlsx');
-//                $message->attach($attachment,['as'=>'测试文档.xlsx']);
-//            }
-//        );
-//dd($res);
-        $conf = @file_get_contents('banner.txt');
-        $banner = $conf ? json_decode($conf,true):[];
+        $message = 'spmclassic';
+        $to = $order->mobile;
+        $subject = 'spmclassic';
+        $res = Mail::send(
+            'activemail',
+            ['content' => $message],
+            function ($message) use($to, $subject,$ordernum) {
+                $message->to($to)->subject($subject);
+                $attachment = storage_path('exports/'.$ordernum.'.xls');
+                $message->attach($attachment,['as'=>'spmclassic.xlsx']);
+            }
+        );
 
-        return $this->success('success',null,[
-            'banner' => $banner,
-            'hot' => GdsGoodRescource::collection(GdsGood::whereHas('skus')->orderBy('is_hot','DESC')->take(2)->get()),
-            'new' => GdsGoodRescource::collection(GdsGood::whereHas('skus')->orderBy('id','DESC')->take(4)->get()),
-            'version' => 1,
-            'join' => [
-                [
-                    'id' => 1,
-                    'name' => '5.15公司台球比赛',
-                    'date' => '5.15 - 5.18',
-                    'teacher' => '组织人:彭勇',
-                    'number' => '成功申报:12',
-                    'type_name' => '已结束',
-                    'cover' => 'https://zhongtuizaixian.oss-cn-beijing.aliyuncs.com/201906/16/ZXBnPYNEAc.jpg',
-                ],
-                [
-                    'id' => 2,
-                    'name' => '6.23公司礼仪培训',
-                    'date' => '6.23 - 6.23',
-                    'teacher' => '组织人:彭勇',
-                    'number' => '成功申报:1',
-                    'type_name' => '进行中',
-                    'cover' => 'https://zhongtuizaixian.oss-cn-beijing.aliyuncs.com/201906/16/TkyMCT6HPB.jpg',
-                ],
-                [
-                    'id' => 3,
-                    'name' => '7.10公司篮球比赛',
-                    'date' => '7.10 - 7.10',
-                    'teacher' => '组织人:彭勇',
-                    'number' => '成功申报:6',
-                    'type_name' => '未开始',
-                    'cover' => 'https://zhongtuizaixian.oss-cn-beijing.aliyuncs.com/201906/16/bWsExMGWKJ.jpg',
-                ],
-            ]
-        ]);
     }
 
     public function category(){
@@ -179,8 +197,9 @@ class IndexController extends InitController
         ]);
 
         //写入订单
-        $this->mkOrder($user,$request->data,$request->mail);
+        $order = $this->mkOrder($user,$request->data,$request->mail);
         //写入邮件
+//        $this->index($order);
 
         return $this->success('提交成功');
     }
