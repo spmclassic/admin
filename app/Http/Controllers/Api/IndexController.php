@@ -177,11 +177,12 @@ class IndexController extends InitController
 
         $rules = [
             'data' => 'required',
-            'mail' => 'required',
+            'mail' => 'required|email',
         ];
         $messages = [
             'data.required' => '无商品',
             'mail.required' => '请输入邮箱',
+            'mail.email' => '邮箱格式错误',
         ];
         $validator = Validator::make($data, $rules, $messages);
 
@@ -199,7 +200,7 @@ class IndexController extends InitController
         //写入订单
         $order = $this->mkOrder($user,$request->data,$request->mail);
         //写入邮件
-//        $this->index($order);
+        $this->index($order);
 
         return $this->success('提交成功');
     }
