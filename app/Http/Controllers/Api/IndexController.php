@@ -157,9 +157,10 @@ class IndexController extends InitController
             function ($message) use($to, $subject,$ordernum) {
                 $message->to($to)->subject($subject);
                 $attachment = storage_path('exports/'.$ordernum.'.xls');
-                $message->attach($attachment,['as'=>'spmclassic.xlsx']);
+                $message->attach($attachment,['as'=>'spmclassic.xls']);
             }
         );
+        info($res);
 
     }
 
@@ -194,7 +195,7 @@ class IndexController extends InitController
         //写入用户
         UserCallback::saveBy([
             'name' => $request->mail,
-            'content' => $request->mark,
+            'content' => $request->mark ?? ' -- ',
         ]);
 
         //写入订单
