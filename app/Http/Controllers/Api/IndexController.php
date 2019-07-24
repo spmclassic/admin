@@ -108,7 +108,7 @@ class IndexController extends InitController
             ],
         ];
         //组合订单数据
-        $titles = ['No.','Photo','Description'];
+        $titles = ['No.','Description'];
         foreach ($attr as $val){
             $titles[] = $val['name'];
         }
@@ -117,11 +117,12 @@ class IndexController extends InitController
         $cellData[] = $titles;
 
         foreach ($order->items as $key => $item){
-            $need = [$key+1,$item->good->image ?? '',$item->good->name ?? ''];
+            $need = [$key+1,$item->good->name ?? ''];
             foreach ($attr as $valll){
                 $need[] = $item->good->intro["'{$valll['id']}'"] ?? '';
             }
             $need[] = $item->sku_id;
+            $need[] = $item->remark;
             $cellData[] = $need;
         }
 
@@ -192,21 +193,23 @@ class IndexController extends InitController
         }
         $user = \Auth::user();
 
+        //写入订单
+        $order = $this->mkOrder($user,$request->data,$request->mail,$request->remark);
+
         //写入用户
         UserCallback::saveBy([
+            'user_id' => $order->id,
             'name' => $request->mail,
             'content' => $request->mark ?? ' -- ',
         ]);
 
-        //写入订单
-        $order = $this->mkOrder($user,$request->data,$request->mail);
         //写入邮件
         $this->index($order);
 
         return $this->success('提交成功');
     }
 
-    protected function mkOrder($user,$goods,$mail = null){
+    protected function mkOrder($user,$goods,$mail = null,$remark = null){
         $serial = time().$user['id'];
         $order = OrdOrder::saveBy([
             'serial' => $serial,
@@ -222,6 +225,7 @@ class IndexController extends InitController
                     'order_id' => $order->id,
                     'spu_id' => $ksy,
                     'sku_id' => $val,
+                    'remark' => $remark[$ksy] ?? '',
                 ]);
                 $good = GdsGood::find($ksy)->name . " * ".$val .' | ';
                 $goods_name .= $good;
