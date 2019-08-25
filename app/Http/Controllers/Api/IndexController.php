@@ -92,10 +92,10 @@ class IndexController extends InitController
                 '','','','','','','Official Quotation Template From SPM','',''
             ],
             [
-                'SPM Classic Furniture Co., Ltd'
+                'SPM CLASSIC LIMITED'
             ],
             [
-                'Ad:H4, Beitang, Art Zoo, Songzhuang, Tongzhou Districrt, Beijing,CN 300451'
+                'Ad:FLAT/RM A 12/F KIU FU COMM BLDG 300 LOCKHART RD WAN CHAI HONG KONG'
             ],
             [
                 'http://spmclassic.com'
