@@ -1,8 +1,8 @@
-Hey Dear,<br />
-We appreciate for your visiting SPM CLASSIC FURNITURE at N1B20 in Shanghai.<br />
-It was a pleasure to meet you and discuss about our future together.<br />
-SPM product information for the items that you have interested has been sent to your email.<br />
-Please let us know how I can help you further!<br />
+Dear Customer,<br />
+We thank you for your visit to us at the Shanghai China International Furniture Fair.<br />
+Hereby we send you all product information regarding your chosen items.<br />
+Please feel free to contact us if you want more information or have any questions.<br />
+Thank you for choosing SPM Classic Furniture.<br />
 <br />
-Best Wishes to you!<br />
+Kind regards,<br />
 SPM Group<br />
